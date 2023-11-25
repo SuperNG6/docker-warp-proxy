@@ -1,22 +1,16 @@
-FROM ubuntu:jammy
-LABEL maintainer="SuperNG6"
-
-WORKDIR /warp
-
-RUN apt update && apt -y install --no-install-recommends haproxy curl ca-certificates && \
-    curl -o warp.deb https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2023_3_258_1_amd64_ce5bb06f9b.deb && \
-    apt update && apt -y install --no-install-recommends ./warp.deb && \
-    rm warp.deb && \
-    echo "**** cleanup ****" && \
-    apt-get clean && \
-    rm -rf \
-        /tmp/* \
-        /var/lib/apt/lists/* \
-        /var/tmp/*
-
-COPY root/ /
-RUN chmod +x /warp/entrypoint.sh
-
-EXPOSE 40000
-
-ENTRYPOINT [ "/warp/entrypoint.sh"]
+FROM ubuntu:22.04
+ENV WARP_LICENSE=
+ENV FAMILIES_MODE=off
+EXPOSE 1080/tcp
+RUN apt update && \
+  apt install curl gpg socat -y && \
+  curl https://pkg.cloudflareclient.com/pubkey.gpg | \
+  gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg && \
+  echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ jammy main" | \
+  tee /etc/apt/sources.list.d/cloudflare-client.list && \
+  apt update && \
+  apt install cloudflare-warp -y && \
+  rm -rf /var/lib/apt/lists/*
+COPY --chmod=755 entrypoint.sh entrypoint.sh
+VOLUME ["/var/lib/cloudflare-warp"]
+CMD ["./entrypoint.sh"]
