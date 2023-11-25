@@ -44,20 +44,15 @@ Success
 version: "3"
 services:
   warp:
-    image: aleskxyz/warp-svc:latest
-    expose:
-    - 1080
+    image: superng6/warp-proxy:latest
+    ports:
+      - 1080:1080
     restart: always
     environment:
-      WARP_LICENSE: xxxxxxxx-xxxxxxxx-xxxxxxxx
-      FAMILIES_MODE: off
+      - "PROXY_PORT=1080"
+      - "WARP_LICENSE="
+      - "FAMILIES_MODE=off"
     volumes:
-    - ./warp:/var/lib/cloudflare-warp
-  app:
-    image: <app-image>
-    depends_on:
-    - warp
-    environment:
-      proxy: warp:1080
+      - ./warp:/var/lib/cloudflare-warp
 ```
 

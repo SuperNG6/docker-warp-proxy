@@ -11,5 +11,5 @@ if [[ -n $WARP_LICENSE ]]; then
   warp-cli --accept-tos set-license "${WARP_LICENSE}"
 fi
 warp-cli --accept-tos connect
-socat tcp-listen:1080,reuseaddr,fork tcp:localhost:40000 &
+socat tcp-listen:${PROXY_PORT},reuseaddr,fork tcp:localhost:40000 &
 fg %1

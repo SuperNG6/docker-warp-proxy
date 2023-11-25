@@ -6,6 +6,7 @@ services:
       - 1080:1080
     restart: always
     environment:
+      - "PROXY_PORT=1080"
       - "WARP_LICENSE="
       - "FAMILIES_MODE=off"
     volumes:
