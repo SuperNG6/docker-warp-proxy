@@ -1,12 +1,12 @@
 version: "3"
 services:
   warp:
-    image: aleskxyz/warp-svc:latest
+    image: superng6/warp-proxy:latest
     ports:
-    - 1080:1080
+      - 1080:1080
     restart: always
     environment:
-    - "WARP_LICENSE="
-    - "FAMILIES_MODE=off"
+      - "WARP_LICENSE="
+      - "FAMILIES_MODE=off"
     volumes:
-    - ./warp:/var/lib/cloudflare-warp
+      - ./warp:/var/lib/cloudflare-warp
